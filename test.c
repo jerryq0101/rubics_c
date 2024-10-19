@@ -16,6 +16,17 @@ void rotate_cube(int axis, char direction);
 #define INPUT_ROW 13
 #define INPUT_COL 1
 
+#define BLOCK "\u2588"
+#define RED "\033[0;31m"
+#define GREEN "\033[0;32m"
+#define YELLOW "\033[0;33m"
+#define BLUE "\033[0;34m"
+#define MAGENTA "\033[0;35m"
+#define CYAN "\033[0;36m"
+#define RESET "\033[0m"
+
+const char* COLORS[] = {RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN};
+
 /*
 6 sides of a cube
 */
@@ -48,14 +59,32 @@ int main(void) {
         // Ready for input
         move_cursor(INPUT_ROW, INPUT_COL);
 
-
         int c;
         int count = 0;
+        static int axis = 1;
 
         while ((c = getchar()) != EXIT_CHAR) {
-                rotate_cube(2, 'r');
+                switch (c) {
+                        case 'w':
+                                axis = axis == 10 ? 1 : axis + 1;
+                                break;
+                        case 's':
+                                axis = axis == 0 ? 9 : axis - 1;
+                                break;
+                        case 'r':
+                                rotate_cube(axis, 'r');
+                                break;
+                        case 'l':
+                                rotate_cube(axis, 'l');
+                                break;
+                        case 'u':
+                                rotate_cube(axis, 'u');
+                                break;
+                        case 'd':
+                                rotate_cube(axis, 'd');
+                                break;
+                }
 
-                
                 printf("\033[2J\033[H");
                 print_cube(cube_slab);
 
@@ -67,7 +96,11 @@ int main(void) {
         return 0;
 }
 
+
+
 // Array processing --------------------
+
+void shift_array_3(int *array[], int direction);
 
 // Refactor this to pointer operations afterwards to flex 
 void setup_cube(int cube_slab[12][9]) {
@@ -100,7 +133,7 @@ void print_cube(int cube_slab[12][9]) {
         for (int i = 0; i < 12; i++) {
                 for (int j = 0; j < 9; j++) {
                         if (cube_slab[i][j]) {
-                                printf("%d ", cube_slab[i][j]);
+                                printf("%s%s%s%s", COLORS[cube_slab[i][j]-1], BLOCK, BLOCK, RESET);
                         } else {
                                 printf("  ");
                         }
@@ -109,42 +142,48 @@ void print_cube(int cube_slab[12][9]) {
         }
 }
 
-void shift_array_3(int *array[], int direction);
-
 void rotate_cube(int axis, char direction) {
-        int direction = 1;
+        int dir = 1;
         if (axis <= 3 || (axis >= 7 && axis <= 9)) // When right and left makes sense
         {
-                direction = (direction == 'r') ? 1 : 0;
+                dir = (direction == 'r') ? 1 : 0;
                 
         }
         else // When up and down makes sense
         {
-                direction = (direction == 'u') ? 1 : 0;
+                dir = (direction == 'u') ? 1 : 0;
         }
 
         switch (axis) {
                         case 1:
-                                shift_array_3(axis_1, direction);
+                                shift_array_3(axis_1, dir);
                                 break;
                         case 2:
-                                shift_array_3(axis_2, direction);
+                                shift_array_3(axis_2, dir);
                                 break;
                         case 3:
-                                shift_array_3(axis_3, direction);
+                                shift_array_3(axis_3, dir);
+                                break;
+                        case 4:
+                                shift_array_3(axis_4, dir);
+                                break;
+                        case 5:
+                                shift_array_3(axis_5, dir);
+                                break;
+                        case 6:
+                                shift_array_3(axis_6, dir);
                                 break;
                         case 7:
-                                shift_array_3(axis_7, direction);
+                                shift_array_3(axis_7, dir);
                                 break;
                         case 8:
-                                shift_array_3(axis_8, direction);
+                                shift_array_3(axis_8, dir);
                                 break;
                         case 9:
-                                shift_array_3(axis_9, direction);
+                                shift_array_3(axis_9, dir);
                                 break;
         }
 }
-
 
 void shift_array_3(int *array[], int direction) {
         if (direction) // positive direction: right / cc / up
@@ -173,6 +212,7 @@ void shift_array_3(int *array[], int direction) {
                 }
         }
 }
+
 
 
 // Basic functions ---------------------
