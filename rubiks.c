@@ -119,8 +119,8 @@ void print_info()
         printf("- Use 'r' for right/down and 'l' for left/up cube rotations \n");
         move_cursor(8, 60);
         printf("- Press '~' to exit the program\n");
-        // move_cursor(10, 60);
-        // printf("@jerryq0101");
+        move_cursor(10, 60);
+        printf("@jerryq0101");
 }
 
 // Cube Functions ----------------------
