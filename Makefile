@@ -1,3 +1,2 @@
-
-test: test.c
-	clang -o test test.c
+test: rubiks.c
+	clang -o test rubiks.c
